@@ -1532,7 +1532,7 @@ body.dark-mode .btn-confirm:hover {
 }
 .btn-decline {
     background-color: #F44336; 
-    color: #fff; /* Texto blanco 
+    color: #fff; 
 }
 .btn-decline:hover {
     background-color: #da190b; 

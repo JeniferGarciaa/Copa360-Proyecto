@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const showRegisterButton = document.getElementById('show-register');
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
-    
+    const mainCarousel = document.getElementById('mainCarousel');
     // Selectores de la Página de Mundiales
     const mundialGridView = document.getElementById('mundial-grid-view');
     const mundialPostsView = document.getElementById('mundial-posts-view');
@@ -627,11 +627,20 @@ document.addEventListener('DOMContentLoaded', function() {
         'polemicas': 'Datos/Polemicas.json',
         'estadiosysedes': 'Datos/Estadiosysedes.json',
         'mascotas': 'Datos/Mascotas.json',
+        'comunidad': 'Datos/Comunidad.json',
+        'noticias': 'Datos/Noticias.json'
     };
 
     // --- (MODIFICADA) FUNCIÓN 'fetchData' ---
     const fetchData = async (category) => {
         currentCategory = category; // Almacena la categoría activa
+        if (mainCarousel) {
+            if (category === 'todo') {
+                mainCarousel.classList.remove('hidden');
+            } else {
+                mainCarousel.classList.add('hidden');
+            }
+        }
         const filePath = categoryDataMap[category];
         if (!filePath) {
             console.error(`No se encontró un archivo para la categoría: ${category}`);
@@ -958,7 +967,16 @@ document.addEventListener('DOMContentLoaded', function() {
             'ImagenesProyecto/banderas/es.png',
             'ImagenesProyecto/banderas/ar.png',
             'ImagenesProyecto/banderas/al oc.png',
-            'ImagenesProyecto/banderas/mx.png'
+            'ImagenesProyecto/banderas/mx.png',
+            'ImagenesProyecto/banderas/eng.png',
+            'ImagenesProyecto/banderas/cl.png',
+            'ImagenesProyecto/banderas/se.png',
+            'ImagenesProyecto/banderas/ch.png',
+            'ImagenesProyecto/banderas/brasil.png',
+            'ImagenesProyecto/banderas/francia.png',
+            'ImagenesProyecto/banderas/it.png',
+            'ImagenesProyecto/banderas/uy.png'
+
         ];
 
         grid.innerHTML = ''; 
@@ -1701,14 +1719,33 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Iniciar el Tour (si es necesario) ---
     // Lo llamamos un poco después para que la página cargue bien
     setTimeout(startTour, 1000); // Inicia el tour 1 segundo después de cargar
+    // --- LÓGICA PARA BOTONES DEL HEADER (Comunidad y Noticias) ---
+    const btnHeaderComunidad = document.getElementById('header-btn-comunidad');
+    const btnHeaderNoticias = document.getElementById('header-btn-noticias');
 
-    // ==========================================================
-    // --- (FIN) LÓGICA DEL ONBOARDING ---
-    // ==========================================================
+    if (btnHeaderComunidad) {
+        btnHeaderComunidad.addEventListener('click', (e) => {
+            // 1. Usamos tu función existente para resetear vistas (ocultar admin, login, etc.)
+            navigateToHome(e); 
+            
+            // 2. Cargamos los datos de comunidad
+            fetchData('comunidad');
+            
+            // 3. (Opcional) Actualizamos visualmente la barra de filtros de abajo
+            // para quitar la clase 'active' de otras píldoras
+            filterPills.forEach(p => p.classList.remove('active'));
+        });
+    }
 
-    // ==========================================================
-    // --- CARGA INICIAL DE LA PÁGINA ---
-    // ==========================================================
+    if (btnHeaderNoticias) {
+        btnHeaderNoticias.addEventListener('click', (e) => {
+            navigateToHome(e);
+            fetchData('noticias');
+            filterPills.forEach(p => p.classList.remove('active'));
+        });
+    }   
+    
     fetchData('todo');
+
 
 }); // Cierre final de DOMContentLoaded
